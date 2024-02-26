@@ -88,11 +88,30 @@
             this.$emit('input', this.search);
     
             if (this.isAsync) {
+                // Debounce the filterResults function
+                const debouncedFilter = this.debounceSearch(this.filterResults, 300);
+                debouncedFilter(); // Trigger the debounced function
                 this.isLoading = true;
+                setTimeout(() => {
+                    this.filterResults();
+                    this.isLoading = false; // Set isLoading to false after filtering
+                    this.isOpen = true;
+                }, 1000); // Simulated delay of 1 second
             } else {
                 this.filterResults();
                 this.isOpen = true;
             }
+        },
+        debounceSearch: function(func, delay) {
+            let timeoutId;
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(function() {
+                    func.apply(context, args);
+                }, delay);
+            };
         },
         handleClickOutside(event) {
             if (!this.$el.contains(event.target)) {

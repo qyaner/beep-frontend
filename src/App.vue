@@ -12,6 +12,7 @@
         'Tangerine',
         'Pineapple'
       ]"
+      :isAsync="true"
     />
   </div>
 </template>
