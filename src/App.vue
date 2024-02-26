@@ -1,16 +1,29 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <AsyncSearch
+      :items="[
+        'Apple',
+        'Banana',
+        'Orange',
+        'Mango',
+        'Pear',
+        'Peach',
+        'Grape',
+        'Tangerine',
+        'Pineapple'
+      ]"
+    />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import AsyncSearch from './components/AsyncSearch.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    AsyncSearch
+}
 }
 </script>
 
