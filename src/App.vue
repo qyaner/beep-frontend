@@ -7,11 +7,14 @@
         :isAsync="true"
         class="search-box"
       />
+      <p>With country name and code</p>
       <h2>Sync Search</h2>
       <AsyncSearch 
         :items="countries"
+        labelKey="name"
         class="search-box"
       />
+      <p>With country name only</p>
     </div>
   </div>
 </template>
@@ -46,11 +49,22 @@ body {
 h1, h2 {
   color: #333;
   font-size: large;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+} 
+
+p {
+  color: #333;
+  font-size: small;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .search-box {
-  margin-bottom: 20px;
+  margin-bottom: 1px;
   width: 100%;
+}
+
+.search-content {
+  margin-bottom: 20px;
 }
 
 .search-container {
@@ -58,7 +72,6 @@ h1, h2 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 220px;
   width: 300px;
   margin: 0 auto;
   border: 1px solid #ccc;

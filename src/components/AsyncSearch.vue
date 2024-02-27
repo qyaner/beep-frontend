@@ -27,7 +27,8 @@
                 ref="asyncResult"
                 :class="{ 'is-active': i === arrowCounter }"
                 >
-                {{ result }}
+                <div>{{ result.name }}</div>
+                <div v-if="shouldDisplayCode(result)">Code: {{ result.code }}</div>
                 </li>
             </ul>
         </div>
@@ -48,6 +49,11 @@
             required: false,
             default: false,
         },
+        labelKey: {
+            type: String,
+            default: 'name-code', // Default key for string only custom search result labels
+        },
+        
       },
       data() {
         return {
@@ -76,14 +82,27 @@
       },
       methods: {
         setResult(result) {
-            this.search = result;
+            this.search = result.name;
             this.isOpen = false;
         },
         filterResults() {
-            const names = this.items.map(item => item.name);
-            this.results = names.filter((name) => {
-                return name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
-            });
+            const filteredItems = this.items.filter(item =>
+                item.name.toLowerCase().indexOf(this.search.toLowerCase()) > -1 ||
+                item.code.toLowerCase().indexOf(this.search.toLowerCase()) > -1
+            );
+
+            this.results = filteredItems.map(item => ({
+                name: item.name,
+                code: item.code,
+            }));
+            
+        },
+        shouldDisplayCode() {
+            if (this.labelKey == 'name-code') {
+                return true;
+            } else {
+                return false;
+            }
         },
         onChange() {
             this.$emit('input', this.search);
@@ -154,7 +173,7 @@
             }
         },
         onEnter() {
-            this.search = this.results[this.arrowCounter];
+            this.search = this.results[this.arrowCounter].name;
             this.isOpen = false;
             this.arrowCounter = -1;
         },
