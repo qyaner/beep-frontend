@@ -1,17 +1,7 @@
 <template>
   <div id="app">
     <AsyncSearch
-      :items="[
-        'Apple',
-        'Banana',
-        'Orange',
-        'Mango',
-        'Pear',
-        'Peach',
-        'Grape',
-        'Tangerine',
-        'Pineapple'
-      ]"
+      :items="countries"
       :isAsync="true"
     />
   </div>
@@ -19,12 +9,18 @@
 
 <script>
 import AsyncSearch from './components/AsyncSearch.vue';
+import countries from './data/countries.json';
 
 export default {
   name: 'App',
   components: {
     AsyncSearch
-}
+  },
+  data() {
+    return {
+      countries: countries
+    };
+  }
 }
 </script>
 

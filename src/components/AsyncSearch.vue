@@ -80,8 +80,9 @@
             this.isOpen = false;
         },
         filterResults() {
-            this.results = this.items.filter((item) => {
-                return item.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+            const names = this.items.map(item => item.name);
+            this.results = names.filter((name) => {
+                return name.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
             });
         },
         onChange() {
