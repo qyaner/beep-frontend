@@ -276,7 +276,5 @@
     .loading {
         padding: 10px;
     }
-
-    .selected-items {
-    }
+    
 </style>
