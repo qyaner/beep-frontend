@@ -33,10 +33,17 @@
                 </li>
             </ul>
         </div>
+        <div class="selected-items">
+            <div v-for="(selectedItem, index) in selectedItems" :key="index">
+                <span>{{ selectedItem.name }}</span>
+                <span v-if="shouldDisplayCode(selectedItem)"> (Code: {{ selectedItem.code }})</span>
+                <button @click="removeSelectedItem(selectedItem)">Remove</button>
+            </div>
+        </div>
     </div>
   </template>
   
-  <script>
+<script>
     export default {
       name: 'AsyncSearch',
       props: {
@@ -63,6 +70,7 @@
             search: '',
             isLoading: false,
             arrowCounter: -1,
+            selectedItems: [],
         };
       },
       watch: {
@@ -70,11 +78,12 @@
             if (value.length !== oldValue.length) {
                 this.results = value.map(item => ({
                     ...item,
-                    selected: false // Initialize selected property for each item;
+                    selected: item.selected // Initialize selected property for each item;
                 }));
                 this.isLoading = false;
             }
         },
+        
       },
       mounted() {
         document.addEventListener('click', this.handleClickOutside)
@@ -98,7 +107,7 @@
             this.results = filteredItems.map(item => ({
                 name: item.name,
                 code: item.code,
-                selected: false
+                selected: item.selected
             }));
             
         },
@@ -107,6 +116,20 @@
                 return true;
             } else {
                 return false;
+            }
+        },
+        removeSelectedItem(selectedItem) {
+            const index = this.selectedItems.findIndex(
+            item => item.name === selectedItem.name && item.code === selectedItem.code);
+            if (index !== -1) {
+                this.selectedItems.splice(index, 1); // Remove the selected item from the array
+                // Set the corresponding result's selected property to false
+                const correspondingResult = this.results.find(
+                    result => result.name === selectedItem.name 
+                    && result.code === selectedItem.code);
+                if (correspondingResult) {
+                    correspondingResult.selected = false;
+                }
             }
         },
         onChange() {
@@ -142,11 +165,15 @@
             if (!this.$el.contains(event.target)) {
                 this.isOpen = false;
                 this.arrowCounter = -1;
+                this.results.forEach(result => {
+                    result.selected = this.selectedItems.some(selectedItem =>
+                    selectedItem.name === result.name && selectedItem.code === result.code);
+                });
             }
         },
         onKeyPress(event) {
             if (event.key === 'Escape') {
-            this.onEscape();
+                this.onEscape();
             }
         },
         scrollResultIntoView() {
@@ -178,7 +205,8 @@
             }
         },
         onEnter() {
-            this.results[this.arrowCounter].selected = !this.results[this.arrowCounter].selected;
+            const result = this.results[this.arrowCounter];
+            this.toggleSelection(result);
         },
         onEscape() {
             this.isOpen = false;
@@ -186,57 +214,69 @@
         },
         toggleSelection(result) {
             result.selected = !result.selected; // Toggle selected property
+            if (result.selected) {
+                this.selectedItems.push({ name: result.name, code: result.code });
+            } else {
+                const index = this.selectedItems.findIndex(
+                selectedItem => selectedItem.name === result.name && selectedItem.code === result.code);
+                if (index !== -1) {
+                    this.selectedItems.splice(index, 1);
+                }
+            }
         },
       },
     };
-  </script>
+</script>
   
-  <style>
+<style>
     .async {
         position: relative;
     }
 
     .input-container {
-  position: relative;
-  display: inline-block;
-}
+        position: relative;
+        display: inline-block;
+    }
 
-input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-}
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
 
-.async-results {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 1000;
-  padding: 0;
-  margin: 0;
-  border: 1px solid #ccc;
-  width: 100%;
-  max-height: 200px;
-  overflow: auto;
-  background-color: #fff;
-  border-radius: 5px;
-}
+    .async-results {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        padding: 0;
+        margin: 0;
+        border: 1px solid #ccc;
+        width: 100%;
+        max-height: 200px;
+        overflow: auto;
+        background-color: #fff;
+        border-radius: 5px;
+    }
 
-.async-result {
-  list-style: none;
-  text-align: left;
-  padding: 10px;
-  cursor: pointer;
-}
+    .async-result {
+        list-style: none;
+        text-align: left;
+        padding: 10px;
+        cursor: pointer;
+    }
 
-.async-result.is-active,
-.async-result:hover {
-  background-color: #5f9ea0;
-}
+    .async-result.is-active,
+    .async-result:hover {
+        background-color: #5f9ea0;
+    }
 
-.loading {
-  padding: 10px;
-}
-  </style>
+    .loading {
+        padding: 10px;
+    }
+
+    .selected-items {
+    }
+</style>

@@ -6,6 +6,7 @@
         :items="countries"
         :isAsync="true"
         class="search-box"
+        @toggle-selection="toggleSelection"
       />
       <p>With country name and code</p>
       <h2>Sync Search</h2>
@@ -13,6 +14,7 @@
         :items="countries"
         labelKey="name"
         class="search-box"
+        @toggle-selection="toggleSelection"
       />
       <p>With country name only</p>
     </div>
@@ -30,9 +32,23 @@ export default {
   },
   data() {
     return {
-      countries: countries
+      countries: countries,
+      selectedCountries: []
     };
-  }
+  },
+  methods: {
+    // Method to toggle selection and update selectedCountries array
+    toggleSelection(result) {
+      const index = this.selectedCountries.findIndex(
+        item => item.name === result.name && item.code === result.code
+      );
+      if (index !== -1) {
+        this.selectedCountries.splice(index, 1);
+      } else {
+        this.selectedCountries.push(result);
+      }
+    },
+  },
 }
 </script>
 
