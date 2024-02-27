@@ -29,6 +29,7 @@
                 >
                 <div>{{ result.name }}</div>
                 <div v-if="shouldDisplayCode(result)">Code: {{ result.code }}</div>
+                <div v-if="result.selected" class="tick-mark">✔</div>
                 </li>
             </ul>
         </div>
@@ -67,7 +68,10 @@
       watch: {
         items: function (value, oldValue) {
             if (value.length !== oldValue.length) {
-                this.results = value;
+                this.results = value.map(item => ({
+                    ...item,
+                    selected: false // Initialize selected property for each item;
+                }));
                 this.isLoading = false;
             }
         },
@@ -83,7 +87,7 @@
       methods: {
         setResult(result) {
             this.search = result.name;
-            this.isOpen = false;
+            this.toggleSelection(result)
         },
         filterResults() {
             const filteredItems = this.items.filter(item =>
@@ -94,6 +98,7 @@
             this.results = filteredItems.map(item => ({
                 name: item.name,
                 code: item.code,
+                selected: false
             }));
             
         },
@@ -173,13 +178,14 @@
             }
         },
         onEnter() {
-            this.search = this.results[this.arrowCounter].name;
-            this.isOpen = false;
-            this.arrowCounter = -1;
+            this.results[this.arrowCounter].selected = true; // Set selected to true
         },
         onEscape() {
             this.isOpen = false;
             this.arrowCounter = -1;
+        },
+        toggleSelection(result) {
+            result.selected = !result.selected; // Toggle selected property
         },
       },
     };
