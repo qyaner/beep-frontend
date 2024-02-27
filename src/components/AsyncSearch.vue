@@ -178,7 +178,7 @@
             }
         },
         onEnter() {
-            this.results[this.arrowCounter].selected = true; // Set selected to true
+            this.results[this.arrowCounter].selected = !this.results[this.arrowCounter].selected;
         },
         onEscape() {
             this.isOpen = false;
