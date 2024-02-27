@@ -1,5 +1,7 @@
 # beeps-frontend
 
+### Deployment Link: https://master--venerable-sprinkles-3def52.netlify.app/
+
 ## Project setup
 ```
 npm install
