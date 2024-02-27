@@ -172,34 +172,46 @@
     }
 
     .input-container {
-        position: relative;
-        display: inline-block;
-    }
-  
-    .async-results {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        z-index: 1000;
-        padding: 0;
-        margin: 0;
-        border: 1px solid #eeeeee;
-        width: 100%; 
-        max-height: 120px;
-        overflow: auto;
-        background-color: #fff;
-    }
-  
-    .async-result {
-        list-style: none;
-        text-align: left;
-        padding: 4px 2px;
-        cursor: pointer;
-    }
-  
-    .async-result.is-active,
-    .async-result:hover {
-        background-color: #4AAE9B;
-        color: white;
-    }
+  position: relative;
+  display: inline-block;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.async-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-height: 200px;
+  overflow: auto;
+  background-color: #fff;
+  border-radius: 5px;
+}
+
+.async-result {
+  list-style: none;
+  text-align: left;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.async-result.is-active,
+.async-result:hover {
+  background-color: #5f9ea0;
+}
+
+.loading {
+  padding: 10px;
+}
   </style>
